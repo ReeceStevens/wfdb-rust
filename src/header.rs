@@ -19,39 +19,39 @@ pub enum StorageFormat {
 
 #[derive(PartialEq, Debug)]
 pub struct RecordLine {
-    record_name: String,
-    number_of_segments: Option<u32>,
-    number_of_signals: u32,
-    sampling_frequency: Option<f32>,
-    counter_frequency: Option<f32>,
-    base_counter_value: Option<f32>,
-    samples_per_signal: Option<u32>,
-    base_time: Option<String>,
-    base_date: Option<String>,
+    pub record_name: String,
+    pub number_of_segments: Option<u32>,
+    pub number_of_signals: u32,
+    pub sampling_frequency: Option<f32>,
+    pub counter_frequency: Option<f32>,
+    pub base_counter_value: Option<f32>,
+    pub samples_per_signal: Option<u32>,
+    pub base_time: Option<String>,
+    pub base_date: Option<String>,
 }
 
 #[derive(PartialEq, Debug)]
 pub struct SignalSpecLine {
-    filename: String,
-    format: StorageFormat,
-    samples_per_frame: Option<u32>,
-    skew: Option<u32>,
-    byte_offset: Option<u32>,
-    adc_gain: Option<f32>,
-    baseline: Option<u32>,
-    units: Option<String>,
-    adc_resolution: Option<u32>,
-    adc_zero: Option<u32>,
-    initial_value: Option<u32>,
-    checksum: Option<i32>,
-    block_size: Option<u32>,
-    description: Option<String>,
+    pub filename: String,
+    pub format: StorageFormat,
+    pub samples_per_frame: Option<u32>,
+    pub skew: Option<u32>,
+    pub byte_offset: Option<u32>,
+    pub adc_gain: Option<f32>,
+    pub baseline: Option<u32>,
+    pub units: Option<String>,
+    pub adc_resolution: Option<u32>,
+    pub adc_zero: Option<u32>,
+    pub initial_value: Option<u32>,
+    pub checksum: Option<i32>,
+    pub block_size: Option<u32>,
+    pub description: Option<String>,
 }
 
 #[derive(PartialEq, Debug)]
 pub struct Header {
-    record: RecordLine,
-    signal_specs: Vec<SignalSpecLine>,
+    pub record: RecordLine,
+    pub signal_specs: Vec<SignalSpecLine>,
 }
 
 pub fn parse_record_line(record_line: &str) -> RecordLine {
