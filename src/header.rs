@@ -1,8 +1,5 @@
 use regex::Regex;
 
-use std::fs::File;
-use std::io::Read;
-
 const DEFREQ: f32 = 250_f32;
 
 #[allow(non_camel_case_types)]
