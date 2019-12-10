@@ -3,6 +3,8 @@ name = "wfdb-rust"
 version = "0.1.0"
 authors = ["Reece Stevens <reecestevens24@gmail.com>"]
 edition = "2018"
+license = "MIT"
+description = "A simple library for reading WFDB-format datasets in Rust."
 
 [dependencies]
 regex = "1"
