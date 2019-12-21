@@ -43,7 +43,7 @@ pub struct SignalSpecLine {
     pub adc_resolution: Option<u32>,
     pub adc_zero: Option<u32>,
     pub initial_value: Option<u32>,
-    pub checksum: Option<i32>,
+    pub checksum: Option<i16>,
     pub block_size: Option<u32>,
     pub description: Option<String>,
 }
@@ -248,7 +248,7 @@ pub fn parse_signal_line(signal_line: &str) -> SignalSpecLine {
         if tokens.len() > 6 {
             checksum = Some(
                 tokens[6]
-                    .parse::<i32>()
+                    .parse::<i16>()
                     .expect("Invalid header: checksum specified but not parseable."),
             );
         }

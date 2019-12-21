@@ -8,3 +8,6 @@ description = "A simple library for reading WFDB-format datasets in Rust."
 
 [dependencies]
 regex = "1"
+
+[dev-dependencies]
+glob = "0.3.0"
