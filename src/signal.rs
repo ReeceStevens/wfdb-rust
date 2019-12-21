@@ -5,15 +5,15 @@
 /// Two 12-bit samples in 3 bytes:
 ///
 /// ```text
-/// | 1 2 3 4 5 6 7 8 | 9 10 11 12 1 2 3 4 | 5 6 7 8 9 10 11 12 |
+/// | 8 7 6 5 4 3 2 1 | 12 11 10 9 12 11 10 9 | 8 7 6 5 4 3 2 1 |
 /// ```
 ///
 pub fn parse_212_format(buf: &[u8]) -> Vec<i16> {
     let mut output_buf = vec![];
     for idx in (0..buf.len()).step_by(3) {
         if idx + 1 >= buf.len() { break }
-        let sample_1_lower = buf[idx].reverse_bits() as u16;
-        let mut sample_1_upper = ((buf[idx+1] & 0xF0).reverse_bits() as u16) << 8;
+        let sample_1_lower = buf[idx] as u16;
+        let mut sample_1_upper = ((buf[idx+1] & 0xF0) as u16) << 4;
         if (sample_1_upper & 0x0800) != 0 {
             // Extend two's complement sign bits if last bit is 1
             sample_1_upper |= 0xF000;
@@ -21,8 +21,8 @@ pub fn parse_212_format(buf: &[u8]) -> Vec<i16> {
         output_buf.push((sample_1_lower + sample_1_upper) as i16);
 
         if idx + 2 >= buf.len() { break }
-        let sample_2_lower = (((buf[idx+1] & 0x0F).reverse_bits()) >> 4) as u16;
-        let mut sample_2_upper = ((buf[idx+2].reverse_bits()) << 4) as u16;
+        let sample_2_lower = buf[idx+2] as u16;
+        let mut sample_2_upper = ((buf[idx+1] & 0x0F) as u16) << 8;
         if (sample_2_upper & 0x0800) != 0 {
             // Extend two's complement sign bits if last bit is 1
             sample_2_upper |= 0xF000;
@@ -38,14 +38,12 @@ mod test {
     #[test]
     fn basic_byte_parser() {
         let byte_buf = [
-            0b11110000_u8,
-            0b01101000_u8,
-            0b10000000_u8,
+            0xF0, 0x68, 0x80
         ];
         assert_eq!(
             parse_212_format(&byte_buf),
             vec![
-                1551, 17
+                1776, -1920, // 0x6F0, 0x880
             ]
         );
     }
@@ -53,13 +51,12 @@ mod test {
     #[test]
     fn incomplete_buffer() {
         let byte_buf = [
-            0b11110000_u8,
-            0b01101000_u8,
+            0xF0, 0x68,
         ];
         assert_eq!(
             parse_212_format(&byte_buf),
             vec![
-                1551
+                1776, //0x6F0
             ]
         );
     }
@@ -67,14 +64,12 @@ mod test {
     #[test]
     fn negative_values_buffer() {
         let byte_buf = [
-            0b11111111_u8,
-            0b11111000_u8,
-            0b10000000_u8,
+            0xFF, 0xF8, 0x80
         ];
         assert_eq!(
             parse_212_format(&byte_buf),
             vec![
-                -1, 17
+                -1, -1920 // 0xFFF, 0x880
             ]
         );
     }

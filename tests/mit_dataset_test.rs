@@ -9,13 +9,13 @@ use std::io::Read;
 
 use wfdb_rust::header::read_header;
 use wfdb_rust::signal::parse_212_format;
+use wfdb_rust::parse_wfdb;
 
 /// Tests that an example dataset from the MIT Arrhythmia database can be loaded and parsed without
 /// errors.
 #[test]
 fn can_parse_mit_dataset() {
-    let header_file = read_to_string("data/mit-bih-arrhythmia-database-1.0.0/100.hea").unwrap();
-    let data_file = read("data/mit-bih-arrhythmia-database-1.0.0/100.dat").unwrap();
-    println!("{:?}", read_header(&header_file));
-    println!("{:?}", parse_212_format(&data_file));
+    let (header, signals) = parse_wfdb("data/mit-bih-arrhythmia-database-1.0.0/100.hea");
+    println!("{:?}", header);
+    println!("{:?}", signals);
 }
